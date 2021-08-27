@@ -1,3 +1,6 @@
+camera = document.getElementById("camera");
+Webcam.attach('#camera');
+
 prediction_1 = ""
 
 Webcam.set({
@@ -6,9 +9,6 @@ Webcam.set({
     image_format:'png',
     png_quality:90
 });
-
-camera = document.getElementById("camera");
-Webcam.attach('#camera');
 
 function take_snapshot()
 {
@@ -32,4 +32,61 @@ function speak()
     speak_data_1 = "The First Prediction Is" + prediction_1;
     var utterThis = new SpeechSynthesisUtterance(speak_data_1);
     synth.speak(utterThis);
+}
+
+function check()
+{
+    img = document.getElementById('captured_image');
+    classifier.classify(img, gotResult);
+}
+
+function gotResult(error, results)
+{
+    if (error)
+    {
+        console.error(error);
+    }
+    else
+    {
+        console.log(results);
+        document.getElementById("result_emotion_name").innerHTML = results[0].label;
+
+        prediction_1 = results[0].label;
+        speak();
+
+        if (results[0].label == "hand raised")
+        {
+            document.getElementById("update_emoji").innerHTML = "&#9995;";
+        }
+
+        if (results[0].label == "victory")
+        {
+            document.getElementById("update_emoji").innerHTML = "&#9996;";
+        }
+
+        if (results[0].label == "finger up")
+        {
+            document.getElementById("update_emoji").innerHTML = "&#128070;";
+        }
+
+        if (results[1].label == "amazing")
+        {
+            document.getElementById("update_emoji").innerHTML = "&#128076;";
+        }
+
+        if (results[1].label == "thumbs up")
+        {
+            document.getElementById("update_emoji").innerHTML = "&#128077;";
+        }
+
+        if (results[1].label == "thumbs down")
+        {
+            document.getElementById("update_emoji").innerHTML = "&#128078;";
+        }
+
+        if (results[1].label == "clap")
+        {
+            document.getElementById("update_emoji").innerHTML = "&#128079;";
+        }
+    }
 }
